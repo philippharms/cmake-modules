@@ -53,14 +53,15 @@ function(_codecov_gnu_setup)
   mark_as_advanced(CodeCov_GNU_LCOV CodeCov_GNU_GENHTML)
 
   add_custom_target(codecov_prerun
-    ${CodeCov_GNU_LCOV} --directory . --zerocounters
+    ${CodeCov_GNU_LCOV} --quiet --rc lcov_branch_coverage=1 --directory . --zerocounters
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMENT "Cleaning up coverage statistics")
 
   add_custom_target(codecov_postrun
-    ${CodeCov_GNU_LCOV} --directory . --capture --output-file coverage.info
-    COMMAND ${CodeCov_GNU_LCOV} --remove coverage.info '/usr/*' --output-file coverage.info.cleaned
-    COMMAND ${CodeCov_GNU_GENHTML} -o coverage coverage.info.cleaned
+    ${CodeCov_GNU_LCOV} --quiet --rc lcov_branch_coverage=1 --directory . --capture --output-file coverage.info
+    COMMAND ${CodeCov_GNU_LCOV} --quiet --rc lcov_branch_coverage=1 --remove coverage.info '/usr/*' --output-file coverage.info.cleaned
+    COMMAND ${CodeCov_GNU_LCOV} --rc lcov_branch_coverage=1 --summary coverage.info.cleaned
+    COMMAND ${CodeCov_GNU_GENHTML} --quiet --rc lcov_branch_coverage=1 -o coverage coverage.info.cleaned
     COMMAND ${CMAKE_COMMAND} -E remove ${_outputname}.info ${_outputname}.info.cleaned
 
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -156,7 +157,7 @@ function(add_coverage_run name command)
     message(
       WARNING "Unknown host system \"${CMAKE_HOST_SYSTEM_NAME}\",
         coverage runs that fail may break whole coverage record.")
-    set(failsafe_command ${command} ${ARGV2})
+    set(failsafe_command ${command} ${ARGVN})
   endif()
 
   add_custom_target(${name} COMMAND ${failsafe_command})
