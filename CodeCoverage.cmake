@@ -117,9 +117,9 @@ function(enable_coverage lang)
     unset(CodeCov_${lang}_LINK_FLAGS_INTERNAL)
   endif()
 
-  set(CodeCov_${lang}_FLAGS "${CodeCov_C_FLAGS_INTERNAL}" CACHE STRING
-      "C compiler flags for code coverage.")
-  set(CodeCov_${lang}_LINK_FLAGS "${CodeCov_C_LINK_FLAGS_INTERNAL}" CACHE STRING
+  set(CodeCov_${lang}_FLAGS "${CodeCov_${lang}_FLAGS_INTERNAL}" CACHE STRING
+  "${lang} compiler flags for code coverage.")
+  set(CodeCov_${lang}_LINK_FLAGS "${CodeCov_${lang}_LINK_FLAGS_INTERNAL}" CACHE STRING
       "These flags will be used when a target with coverage is linked.")
   mark_as_advanced(CodeCov_${lang}_FLAGS CodeCov_${lang}_LINK_FLAGS)
 
